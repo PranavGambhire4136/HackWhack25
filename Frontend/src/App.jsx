@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Navbar } from './Component'
-import { Home, SignUp, Login } from './pages'
+import { Home } from './pages'
+import AuthPages from './pages/AuthPages'
 import { Routes, Route } from 'react-router-dom'
 
 
@@ -12,8 +13,7 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<SignUp />} />
+        <Route path="/auth" element={<AuthPages />} />
       </Routes>
     </>
   )
