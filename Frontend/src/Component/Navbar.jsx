@@ -19,7 +19,7 @@ export default function Navbar() {
       <div className="hidden md:flex space-x-6 items-center">
         <Link to="/" className="hover:text-black transition">Home</Link>
         <Link to="/about" className="hover:text-black transition">About Us</Link>
-        <Link to="/auth" className="hover:text-black transition">Login</Link>
+    
 
         {/* Dropdown Menu */}
         <div className="relative">

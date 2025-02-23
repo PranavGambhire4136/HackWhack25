@@ -22,7 +22,7 @@ function Home() {
           {/* Button */}
           <a href="#">
             <button className="border mt-6 px-6 py-3 text-[#1B5465] font-semibold text-lg rounded-full shadow-md 
-              hover:bg-[#011fc5] hover:text-white transition">
+                hover:text-blue-500 transition">
               Get Started
             </button>
           </a>
