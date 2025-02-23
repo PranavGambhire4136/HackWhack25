@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { signUp } from "../auth/signUp";
-import { login } from "../auth/login";
+
 
 const AuthPages = () => {
     const [isLogin, setIsLogin] = useState(true);
@@ -26,9 +25,9 @@ const AuthPages = () => {
 
         try {
             if (isLogin) {
-                await login(formData);
+                // await login(formData);
             } else {
-                await signUp(formData);
+                // await signUp(formData);
             }
             setFormData({ email: "", password: "" });
         } catch (err) {
