@@ -29,7 +29,7 @@ function Home() {
         </div>
 
         {/* Right Content (Image) */}
-        <div className="pt-30 md:w-1/2 flex justify-center mt-10 md:mt-0">
+        <div className="pt-20 md:w-1/2 flex justify-center mt-10 md:mt-0">
           <img 
             src={heroig} 
             alt="AI Buddy" 
@@ -37,6 +37,16 @@ function Home() {
           />
         </div>
       </section>
+      {/* Downward Arrow Icon - Always at the bottom-center */}
+{/* Downward Arrow Icon - Always at the bottom-center */}
+<div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-10">
+<a href="#"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12 4V20M12 20L6 14M12 20L18 14" stroke="#1B5465" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg></a>
+  
+</div>
+
+
     </div>
   );
 }

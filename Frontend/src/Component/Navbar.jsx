@@ -7,7 +7,7 @@ export default function Navbar() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   return (
-    <nav className="bg-[#F9F8F4] px-6 py-4 flex justify-between items-center shadow-md">
+    <nav className="z-10 bg-[#F9F8F4] px-6 py-4 flex justify-between items-center shadow-md">
       {/* Logo */}
       <div className="flex items-center space-x-2">
         <Link to={"/"} className="hover:text-black transition">
