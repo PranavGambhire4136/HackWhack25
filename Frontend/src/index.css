@@ -3,3 +3,12 @@
 *{
     background: #F9F8F4;
 }
+
+.green {
+    background: #1B5465;
+    color: white
+}
+
+.green:hover {
+    background-color: #3b8399;
+}

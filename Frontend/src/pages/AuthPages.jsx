@@ -1,27 +1,27 @@
-import { useState } from 'react';
-import { signUp } from '../auth/signUp';
-import { login } from '../auth/login';
+import { useState } from "react";
+import { signUp } from "../auth/signUp";
+import { login } from "../auth/login";
 
 const AuthPages = () => {
     const [isLogin, setIsLogin] = useState(true);
     const [formData, setFormData] = useState({
-        email: '',
-        password: ''
+        email: "",
+        password: "",
     });
-    const [error, setError] = useState('');
+    const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData(prevState => ({
+        setFormData((prevState) => ({
             ...prevState,
-            [name]: value
+            [name]: value,
         }));
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setError('');
+        setError("");
         setLoading(true);
 
         try {
@@ -30,8 +30,7 @@ const AuthPages = () => {
             } else {
                 await signUp(formData);
             }
-            // Clear form after successful submission
-            setFormData({ email: '', password: '' });
+            setFormData({ email: "", password: "" });
         } catch (err) {
             setError(err.message);
         } finally {
@@ -40,72 +39,89 @@ const AuthPages = () => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-md w-full space-y-8">
-                <div>
-                    <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-                        {isLogin ? 'Sign in to your account' : 'Create new account'}
-                    </h2>
-                </div>
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-500 to-purple-500 px-4">
+            <div className="bg-white shadow-2xl rounded-2xl p-8 w-full max-w-md">
+                <h2 className="text-center text-3xl font-bold text-gray-800">
+                    {isLogin ? "Welcome Back!" : "Create an Account"}
+                </h2>
+                <p className="text-center text-gray-500 mb-6">
+                    {isLogin ? "Sign in to continue" : "Sign up to get started"}
+                </p>
 
                 {error && (
-                    <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-                        <span className="block sm:inline">{error}</span>
+                    <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-4">
+                        {error}
                     </div>
                 )}
 
-                <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-                    <div className="rounded-md shadow-sm -space-y-px">
-                        <div>
-                            <label htmlFor="email" className="sr-only">Email address</label>
-                            <input
-                                id="email"
-                                name="email"
-                                type="email"
-                                required
-                                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                                placeholder="Email address"
-                                value={formData.email}
-                                onChange={handleChange}
-                            />
-                        </div>
-                        <div>
-                            <label htmlFor="password" className="sr-only">Password</label>
-                            <input
-                                id="password"
-                                name="password"
-                                type="password"
-                                required
-                                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                                placeholder="Password"
-                                value={formData.password}
-                                onChange={handleChange}
-                            />
-                        </div>
+                <form className="space-y-6" onSubmit={handleSubmit}>
+
+                    {!isLogin && <div>
+                        <label htmlFor="email" className="text-sm font-medium text-gray-700">
+                            Full Name
+                        </label>
+                        <input
+                            id="name"
+                            name="name"
+                            type="text"
+                            required
+                            className="w-full mt-1 p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                            placeholder="Enter your email"
+                            value={formData.email}
+                            onChange={handleChange}
+                        />
+                    </div>}
+                    
+                    <div>
+                        <label htmlFor="email" className="text-sm font-medium text-gray-700">
+                            Email Address
+                        </label>
+                        <input
+                            id="email"
+                            name="email"
+                            type="email"
+                            required
+                            className="w-full mt-1 p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                            placeholder="Enter your email"
+                            value={formData.email}
+                            onChange={handleChange}
+                        />
                     </div>
 
                     <div>
-                        <button
-                            type="submit"
-                            disabled={loading}
-                            className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                        >
-                            {loading ? 'Processing...' : (isLogin ? 'Sign in' : 'Sign up')}
-                        </button>
+                        <label htmlFor="password" className="text-sm font-medium text-gray-700">
+                            Password
+                        </label>
+                        <input
+                            id="password"
+                            name="password"
+                            type="password"
+                            required
+                            className="w-full mt-1 p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                            placeholder="Enter your password"
+                            value={formData.password}
+                            onChange={handleChange}
+                        />
                     </div>
-
-                    <div className="text-center">
-                        <button
-                            type="button"
-                            onClick={() => setIsLogin(!isLogin)}
-                            className="font-medium text-indigo-600 hover:text-indigo-500"
-                        >
-                            {isLogin 
-                                ? "Don't have an account? Sign up" 
-                                : "Already have an account? Sign in"}
-                        </button>
-                    </div>
+                    
+                    <button
+                        type="submit"
+                        disabled={loading}
+                        className="w-full text-black py-3 rounded-lg font-semibold green transition-all duration-300 shadow-md text-[15px] "
+                    >
+                        {loading ? "Processing..." : isLogin ? "Sign In" : "Sign Up"}
+                    </button>
                 </form>
+
+                <div className="text-center mt-6">
+                    <button
+                        type="button"
+                        onClick={() => setIsLogin(!isLogin)}
+                        className="text-indigo-600 hover:underline font-medium"
+                    >
+                        {isLogin ? "Don't have an account? Sign up" : "Already have an account? Sign in"}
+                    </button>
+                </div>
             </div>
         </div>
     );
