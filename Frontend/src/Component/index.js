@@ -1,3 +1,4 @@
 import Navbar from './Navbar.jsx'
+import Quiz from './Quiz.jsx'
 
-export {Navbar}
+export {Navbar, Quiz}

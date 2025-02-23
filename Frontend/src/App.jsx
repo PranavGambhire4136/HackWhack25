@@ -3,6 +3,7 @@ import Navbar from './Component/Navbar'
 import AuthPages from './pages/AuthPages'
 import { Home } from './pages'
 import { Routes, Route } from 'react-router-dom'
+import { Quiz } from './Component'
 
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/auth" element={<AuthPages />} />
+        <Route path = "/quiz" element={<Quiz />} />
       </Routes>
     </>
   )
