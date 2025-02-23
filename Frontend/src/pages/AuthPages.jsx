@@ -28,7 +28,7 @@ const AuthPages = () => {
         try {
             if (isLogin) {
                 // await login(formData);
-                const res = await axios.get("/login",displayName )
+                const res = await axios.get("/login",formData )
             } else {
                 // await signUp(formData);
                 const res = await axios.post("/signup",formData)
