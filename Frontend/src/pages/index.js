@@ -1,5 +1,5 @@
-import Home from "./Home";
-import Login from "./Login";
-import SignUp from "./SignUp";
+import Home from "./Home.jsx";
+import Login from "./Login.jsx";
+import SignUp from "./SignUp.jsx";
 
 export { Home, Login, SignUp };

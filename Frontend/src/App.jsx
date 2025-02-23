@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Navbar } from './Component'
-import { Home, SignUp, Login } from './pages'
+import { Home, SignUp, Login } from './Pages'
 import { Routes, Route } from 'react-router-dom'
 
 
