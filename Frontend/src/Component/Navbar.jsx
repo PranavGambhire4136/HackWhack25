@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import logo from "../Assets/logo.png"; // Importing logo directly
+import logo from "../Assets/logo.png";
+import { ChevronDown } from "lucide-react"; // Import dropdown icon
 
 export default function Navbar() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -17,13 +18,12 @@ export default function Navbar() {
         <a href="#" className="hover:text-black transition">About Us</a>
 
         {/* Dropdown Menu */}
-        <div
-          className="relative"
-          onMouseEnter={() => setDropdownOpen(true)}
-          onMouseLeave={() => setDropdownOpen(false)}
-        >
-          <button className="hover:text-black transition focus:outline-none">
-            Features
+        <div className="relative">
+          <button
+            className="flex items-center gap-1 hover:text-black transition focus:outline-none"
+            onClick={() => setDropdownOpen(!dropdownOpen)}
+          >
+            Features <ChevronDown className={`w-4 h-4 transition-transform ${dropdownOpen ? "rotate-180" : ""}`} />
           </button>
           {dropdownOpen && (
             <div className="absolute left-0 mt-2 w-56 bg-white shadow-lg rounded-md p-2">
@@ -41,10 +41,11 @@ export default function Navbar() {
 
       {/* Button */}
       <div>
-        <button className="px-4 py-2 border border-gray-600 text-gray-700 rounded-full hover:bg-gray-100 transition">
+        <button className="px-4 py-2 border border-gray-600 text-gray-700 rounded-full transition hover:bg-black hover:text-black hover:border-black">
           Sign Up
-        </button>
-      </div>
+      </button>
+    </div>
+
     </nav>
   );
 }
