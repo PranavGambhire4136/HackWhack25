@@ -29,7 +29,7 @@ function Home() {
         {/* Right Content (Image) */}
         <div className=" pt-70 md:w-1/2 flex justify-center mt-10 md:mt-0">
           <img 
-            src="{heroig}" 
+            src="https://source.unsplash.com/500x500/?technology,ai" 
             alt="AI Buddy" 
             className="rounded-lg shadow-lg"
           />
