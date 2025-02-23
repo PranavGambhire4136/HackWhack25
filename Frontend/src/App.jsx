@@ -4,6 +4,7 @@ import AuthPages from './pages/AuthPages'
 import { Home } from './pages'
 import { Routes, Route } from 'react-router-dom'
 import { Quiz } from './Component'
+import Gemini from './Component/Gemini'
 
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/auth" element={<AuthPages />} />
         <Route path = "/quiz" element={<Quiz />} />
+        <Route path = '/1230'element = {<Gemini />} />
       </Routes>
     </>
   )
