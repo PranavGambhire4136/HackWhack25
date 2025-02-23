@@ -18,6 +18,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/auth" element={<AuthPages />} />
         <Route path = "/quiz" element={<Quiz />} />
+        <Route path = '/1230'element = {<Gemini />} />
       </Routes>
       
     </>
