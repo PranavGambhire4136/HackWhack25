@@ -1,4 +1,5 @@
 import { useState } from "react";
+import axios from "axios";
 
 
 const AuthPages = () => {
@@ -6,6 +7,7 @@ const AuthPages = () => {
     const [formData, setFormData] = useState({
         email: "",
         password: "",
+        displayName: ""
     });
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
@@ -26,8 +28,10 @@ const AuthPages = () => {
         try {
             if (isLogin) {
                 // await login(formData);
+                const res = await axios.get("/login",displayName )
             } else {
                 // await signUp(formData);
+                const res = await axios.post("/signup",formData)
             }
             setFormData({ email: "", password: "" });
         } catch (err) {
@@ -65,8 +69,8 @@ const AuthPages = () => {
                             type="text"
                             required
                             className="w-full mt-1 p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                            placeholder="Enter your email"
-                            value={formData.email}
+                            placeholder="Full Name"
+                            value={formData.displayName}
                             onChange={handleChange}
                         />
                     </div>}
