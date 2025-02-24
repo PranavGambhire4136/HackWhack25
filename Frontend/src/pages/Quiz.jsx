@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Loader2, CheckCircle2, XCircle, RotateCcw, Trophy } from 'lucide-react';
+import ChatBot from './ChatBot.jsx';
+import Recommendations from './Recommendation.jsx';
 
-// Quiz data
+// Sample questions for each category
 const questionsByCategory = {
   NEET: [
     {
@@ -265,26 +267,25 @@ function Quiz() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [score, setScore] = useState(0);
   const [showScore, setShowScore] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [isAnswered, setIsAnswered] = useState(false);
   const [questions, setQuestions] = useState([]);
   const [category, setCategory] = useState(null);
+  const [wrongAnswers, setWrongAnswers] = useState([]);
 
   useEffect(() => {
-    if (category) {
-      setLoading(true);
-      const loadQuestions = async () => {
-        await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
-        setQuestions(questionsByCategory[category]);
-        setLoading(false);
-      };
-      loadQuestions();
-    }
-  }, [category]);
+    const loadQuestions = async () => {
+      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
+      setLoading(false);
+    };
+    loadQuestions();
+  }, []);
 
   const handleCategorySelect = (selectedCategory) => {
     setCategory(selectedCategory);
+    setQuestions(questionsByCategory[selectedCategory]);
+    setLoading(false);
   };
 
   const handleAnswerClick = (answer) => {
@@ -295,10 +296,15 @@ function Quiz() {
 
     if (answer === questions[currentQuestion].answer) {
       setScore(score + 1);
+    } else {
+      setWrongAnswers(prev => [...prev, {
+        question: questions[currentQuestion].question,
+        correctAnswer: questions[currentQuestion].answer
+      }]);
     }
 
     setTimeout(() => {
-      if (currentQuestion < 14) { // 15 questions total (0-14)
+      if (currentQuestion < 14) {
         setCurrentQuestion(currentQuestion + 1);
         setSelectedAnswer(null);
         setIsAnswered(false);
@@ -315,6 +321,7 @@ function Quiz() {
     setSelectedAnswer(null);
     setIsAnswered(false);
     setCategory(null);
+    setWrongAnswers([]);
   };
 
   if (loading) {
@@ -331,24 +338,23 @@ function Quiz() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center">
         <div className="bg-white p-8 rounded-xl shadow-lg max-w-md w-full">
-          <h1 className="text-2xl font-bold text-center mb-8 text-gray-800">
+          <h1 className="text-2xl font-bold text-center mb-6 text-gray-800">
             Choose Your Assessment Category
           </h1>
-          <div className="space-y-6">
+          <div className="space-y-4">
             {(['NEET', 'JEE', 'GATE']).map((cat) => (
               <button
                 key={cat}
                 onClick={() => handleCategorySelect(cat)}
-                className="w-full py-6 px-8 text-xl font-bold rounded-xl transition-all
+                className="w-full py-6 px-8 text-xl font-semibold rounded-lg transition-all duration-300
                          bg-white border-2 border-blue-500 text-blue-600
-                         hover:bg-blue-500 
-                         focus:ring-4 focus:ring-blue-200
-                         shadow-md hover:shadow-xl transform hover:-translate-y-1
-                         flex items-center justify-between"
+                         hover:bg-blue-500 hover:shadow-lg
+                         focus:ring-4 focus:ring-blue-200 hover:-translate-y-1
+                         flex items-center justify-between group"
               >
                 <span>{cat}</span>
                 <svg 
-                  className="w-6 h-6 transition-transform transform group-hover:translate-x-1" 
+                  className="w-6 h-6 transition-transform duration-300 transform group-hover:translate-x-1" 
                   fill="none" 
                   stroke="currentColor" 
                   viewBox="0 0 24 24"
@@ -371,22 +377,37 @@ function Quiz() {
   if (showScore) {
     const percentage = (score / 15) * 100;
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center">
-        <div className="bg-white p-8 rounded-xl shadow-lg max-w-md w-full text-center">
-          <Trophy className="mx-auto text-yellow-500 mb-4" size={64} />
-          <h2 className="text-2xl font-bold mb-4">Assessment Complete!</h2>
-          <p className="text-4xl font-bold text-blue-600 mb-4">{percentage}%</p>
-          <p className="text-lg mb-6">
-            You scored {score} out of 15 questions correctly
-          </p>
-          <button
-            onClick={restartQuiz}
-            className="flex items-center justify-center gap-2 mx-auto px-6 py-3 bg-blue-600 text-white rounded-lg
-                     hover:bg-blue-700 transition-colors"
-          >
-            <RotateCcw size={20} />
-            Restart Quiz
-          </button>
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 p-8">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="bg-white p-8 rounded-xl shadow-lg text-center">
+            <Trophy className="mx-auto text-yellow-500 mb-4" size={64} />
+            <h2 className="text-2xl font-bold mb-4">Assessment Complete!</h2>
+            <p className="text-4xl font-bold text-blue-600 mb-4">{percentage}%</p>
+            <p className="text-lg mb-6">
+              You scored {score} out of 15 questions correctly
+            </p>
+            <button
+              onClick={restartQuiz}
+              className="flex items-center justify-center gap-2 mx-auto px-6 py-3 bg-blue-600 text-white rounded-lg
+                       hover:bg-blue-700 transition-colors"
+            >
+              <RotateCcw size={20} />
+              Restart Quiz
+            </button>
+          </div>
+
+          <div className="space-y-8">
+            <Recommendations
+              category={category}
+              score={percentage}
+              wrongAnswers={wrongAnswers}
+            />
+            <ChatBot
+              weakConcepts={wrongAnswers.map(wa => wa.question)}
+              category={category}
+              score={percentage}
+            />
+          </div>
         </div>
       </div>
     );
@@ -395,7 +416,6 @@ function Quiz() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center p-4">
       <div className="bg-white p-8 rounded-xl shadow-lg max-w-2xl w-full">
-        {/* Progress bar */}
         <div className="w-full bg-gray-200 rounded-full h-2.5 mb-6">
           <div
             className="bg-blue-600 h-2.5 rounded-full transition-all duration-300"
