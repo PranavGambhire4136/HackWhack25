@@ -1,13 +1,14 @@
 import { useState } from "react";
 import axios from "axios";
-
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 const AuthPages = () => {
     const [isLogin, setIsLogin] = useState(true);
+    const navigate = useNavigate(); // Initialize navigation
     const [formData, setFormData] = useState({
         email: "",
         password: "",
-        displayName: ""
+        displayName: "",
     });
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
@@ -26,16 +27,23 @@ const AuthPages = () => {
         setLoading(true);
 
         try {
+            const endpoint = isLogin ? "login" : "signup";
+            const res = await axios.post(
+                `http://localhost:5000/api/v1/${endpoint}`,
+                formData,
+                { headers: { "Content-Type": "application/json" } }
+            );
+            console.log(`${isLogin ? "Login" : "Signup"} Success:`, res.data);
+
             if (isLogin) {
-                // await login(formData);
-                const res = await axios.get("/login",formData )
+                navigate("/"); // Redirect to home after login
             } else {
-                // await signUp(formData);
-                const res = await axios.post("/signup",formData)
+                setIsLogin(true); // Switch to login form after signup
+                setFormData({ email: "", password: "", displayName: "" });
             }
-            setFormData({ email: "", password: "" });
         } catch (err) {
-            setError(err.message);
+            setError(err.response?.data?.message || "Something went wrong");
+            console.error("Error:", err);
         } finally {
             setLoading(false);
         }
@@ -58,23 +66,24 @@ const AuthPages = () => {
                 )}
 
                 <form className="space-y-6" onSubmit={handleSubmit}>
+                    {!isLogin && (
+                        <div>
+                            <label htmlFor="displayName" className="text-sm font-medium text-gray-700">
+                                Full Name
+                            </label>
+                            <input
+                                id="displayName"
+                                name="displayName"
+                                type="text"
+                                required
+                                className="w-full mt-1 p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                                placeholder="Full Name"
+                                value={formData.displayName}
+                                onChange={handleChange}
+                            />
+                        </div>
+                    )}
 
-                    {!isLogin && <div>
-                        <label htmlFor="email" className="text-sm font-medium text-gray-700">
-                            Full Name
-                        </label>
-                        <input
-                            id="name"
-                            name="name"
-                            type="text"
-                            required
-                            className="w-full mt-1 p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                            placeholder="Full Name"
-                            value={formData.displayName}
-                            onChange={handleChange}
-                        />
-                    </div>}
-                    
                     <div>
                         <label htmlFor="email" className="text-sm font-medium text-gray-700">
                             Email Address
@@ -106,11 +115,11 @@ const AuthPages = () => {
                             onChange={handleChange}
                         />
                     </div>
-                    
+
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full text-black py-3 rounded-lg font-semibold green transition-all duration-300 shadow-md text-[15px] "
+                        className="w-full text-black py-3 rounded-lg font-semibold green transition-all duration-300 shadow-md text-[15px]"
                     >
                         {loading ? "Processing..." : isLogin ? "Sign In" : "Sign Up"}
                     </button>
