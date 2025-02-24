@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 
@@ -12,6 +12,36 @@ const AuthPages = () => {
     });
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
+
+    // Function to get cookie value by name
+    const getCookie = (name) => {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+    };
+
+    // Store user data in localStorage
+    const storeUserData = (data) => {
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify({
+            email: data.email,
+            displayName: data.displayName,
+            id: data.id
+        }));
+    };
+
+    useEffect(() => {
+        // Check for auth cookie on component mount
+        const authCookie = getCookie('token');
+        if (authCookie) {
+            try {
+                const userData = JSON.parse(decodeURIComponent(authCookie));
+                storeUserData(userData);
+            } catch (err) {
+                console.error('Error parsing auth cookie:', err);
+            }
+        }
+    }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -31,12 +61,18 @@ const AuthPages = () => {
             const res = await axios.post(
                 `http://localhost:5000/api/v1/${endpoint}`,
                 formData,
-                { headers: { "Content-Type": "application/json" } }
+                { 
+                    headers: { "Content-Type": "application/json" },
+                    withCredentials: true // Enable sending and receiving cookies
+                }
             );
             console.log(`${isLogin ? "Login" : "Signup"} Success:`, res.data);
 
             if (isLogin) {
+                // Store user data from response
+                storeUserData(res.data);
                 navigate("/"); // Redirect to home after login
+                localStorage.setItem("token", res.data.token);
             } else {
                 setIsLogin(true); // Switch to login form after signup
                 setFormData({ email: "", password: "", displayName: "" });
